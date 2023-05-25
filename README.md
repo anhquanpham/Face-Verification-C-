@@ -1,2 +1,6 @@
-# face-verification-cpp
-Face verification with c++ and opencv
+# Face Verification with opencv
+Final Project ELEC2030 - VinUniversity
+
+**Team:** Tran Quoc Bao, Tran Huy Hoang Anh, Pham Anh Quan
+
+**Description:** 
