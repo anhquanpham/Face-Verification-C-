@@ -1,0 +1,6 @@
+.vscode
+/models/database
+/models/train
+/models/main
+/models/groundTruthFaces.yml
+/data
