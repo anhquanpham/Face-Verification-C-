@@ -38,19 +38,20 @@ std::vector<cv::Mat> detection(cv::Mat &image, cv::Ptr<FaceDetectorYN> detector,
     detector->detect(image, faces);
     tm.stop();
 
-    visualize(image, -1, faces, tm.getFPS());
+    cv::Mat result = image.clone();
+    visualize(result, -1, faces, tm.getFPS());
 
     // extract features
     cv::Mat aligned_face, feature;
     if (!faces.empty()) {
-        faceRecognizer->alignCrop(image, faces.row(0), aligned_face);
+        faceRecognizer->alignCrop(result, faces.row(0), aligned_face);
         // Run feature extraction with given aligned_face
         faceRecognizer->feature(aligned_face, feature);
         feature = feature.clone();
     } 
 
     std::vector<cv::Mat> out;
-    out.push_back(faces);
+    out.push_back(result);
     out.push_back(feature);
     return out;
 }

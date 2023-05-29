@@ -13,7 +13,6 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/objdetect.hpp>
-#include <opencv2/core/utility.hpp>
 
 #include <iostream>
 #include <vector>
@@ -60,11 +59,16 @@ int main(int argc, char** argv)
     // Initialize FaceRecognizerSF to the smart pointer faceRecognizer
     cv::Ptr<cv::FaceRecognizerSF> faceRecognizer = cv::FaceRecognizerSF::create(fr_modelPath, "");
 
-    // Create the ground truth folder if it does not exist
-    std::string groundTruthFaces = "groundTruthFace";
+    // Create the ground truth file if it does not exist
+    std::string groundTruthFaces = "groundTruthFace.txt";
     if (!filesystem::exists(groundTruthFaces)) {
-        cout << "Creating database folder: " << groundTruthFaces << endl;
+        cout << "Creating database file: " << groundTruthFaces << endl;
         filesystem::create_directory(groundTruthFaces);
+    }
+    std::string groundTruthFeatures = "groundTruthFeature.txt";
+    if (!filesystem::exists(groundTruthFeatures)) {
+        cout << "Creating database file: " << groundTruthFeatures << endl;
+        filesystem::create_directory(groundTruthFeatures);
     }
 
     // Read images and their names in database
@@ -79,17 +83,26 @@ int main(int argc, char** argv)
     }
 
     /* Process all the images */
+    std:vector<cv::Mat> features;
+    std:vector<cv::String> labels;
     for (auto& image : images) {
         
         std::vector<cv::Mat> out = detection(image, detector, faceRecognizer, scale);
-        if (out.empty()) {
+        cv::Mat feature = out[1];
+
+        if (feature.empty()) {
             cout << "No face detected in " << imageNames[&image - &images[0]] << endl;
             continue;
         };
 
-        cv::Mat feature = out[1];
-        // Save the face to the ground truth folder with the name same as its file name
-        cv::String faceName = filesystem::path(imageNames[&image - &images[0]]).filename().string();
-        imwrite(groundTruthFaces + "/" + faceName, feature);
+        // Save the feature to the ground truth feature vector
+        features.push_back(feature);
+
+        // Save the face name to the labels vector
+        cv::String faceName = filesystem::path(imageNames[&image - &images[0]]).filename().stem().string();
+        labels.push_back(faceName);
     }
+
+    imwrite(groundTruthFaces, labels);
+    imwrite(groundTruthFeatures, features);
 }

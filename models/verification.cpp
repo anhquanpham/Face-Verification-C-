@@ -22,6 +22,8 @@ String verification(Mat feature, double cosine_similar_thresh, double l2norm_sim
             label (String): Name of the detected person
     */
     
+    cout << "Detected face, verifying identity..." << endl;
+    
     // Path to the database of ground truth features
     String databasePath = "groundTruthFace";
     

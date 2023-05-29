@@ -60,8 +60,8 @@ void show_label(Mat& input, String label) {
     cout << "Detected face: " << label << endl;
     std::string text = "Welcome, " + label;
     // Calculate the position of the text
-    int posX = input.cols / 2 - getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).width / 2;
-    int posY = input.rows * 2/3 + getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).height / 2;
+    int posX = int(input.cols / 2 - getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).width / 2);
+    int posY = int(input.rows / 3 + getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).height / 2);
 
-    putText(input, text, Point(0, 15), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+    putText(input, text, Point(posX, posY), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
 }

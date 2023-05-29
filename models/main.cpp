@@ -44,29 +44,6 @@ int main(int argc, char** argv)
 
     TickMeter tm;
 
-    /* Capture camera */
-    int frameWidth, frameHeight;
-    VideoCapture capture;
-    std::string video = parser.get<string>("video");
-    if (video.size() == 1 && isdigit(video[0]))
-        capture.open(parser.get<int>("video"));
-    else
-        capture.open(samples::findFileOrKeep(video));  // keep GStreamer pipelines
-    if (capture.isOpened()) {
-        frameWidth = int(capture.get(CAP_PROP_FRAME_WIDTH) * scale);
-        frameHeight = int(capture.get(CAP_PROP_FRAME_HEIGHT) * scale);
-        cout << "Video " << video
-            << ": width=" << frameWidth
-            << ", height=" << frameHeight
-            << endl;
-    }
-    else {
-        cout << "Could not initialize video capturing: " << video << "\n";
-        return 1;
-    }
-
-    cout << "Press 'SPACE' to save frame, any other key to exit..." << endl;
-
     /* [Initialize_FaceDetectorYN] */
     // Initialize FaceDetectorYN to the smart pointer detector
     Ptr<FaceDetectorYN> detector = FaceDetectorYN::create(fd_modelPath, "", Size(320, 320), scoreThreshold, nmsThreshold, topK);
@@ -75,8 +52,27 @@ int main(int argc, char** argv)
     // Initialize FaceRecognizerSF to the smart pointer faceRecognizer
     Ptr<FaceRecognizerSF> faceRecognizer = FaceRecognizerSF::create(fr_modelPath, "");
 
+    /* Capture camera */
+    int frameWidth, frameHeight;
+    VideoCapture capture(0);
+
+    if (!capture.isOpened()) {
+        std::cout << "Cannot open the video camera" << endl;
+        cin.get(); //wait for any key press
+        return -1;
+    }
+
+    frameWidth = int(capture.get(CAP_PROP_FRAME_WIDTH) * scale);
+    frameHeight = int(capture.get(CAP_PROP_FRAME_HEIGHT) * scale);
+    string window_name = "Face Verification";
+    namedWindow(window_name); //create a window 
+
+    std::cout << "Window size" << ": width=" << frameWidth << ", height=" << frameHeight << endl;
+
+    std::cout << "Press any key to exit..." << endl;
+
     int nFrame = 0;
-    for (;;)
+    while(true)
     {
         // Get frame
         Mat frame;
@@ -99,7 +95,7 @@ int main(int argc, char** argv)
                 show_label(result, label);
             }
         } 
-        imshow("Live", result);
+        imshow(window_name, result);
 
         ++nFrame;
 
@@ -107,8 +103,8 @@ int main(int argc, char** argv)
         if (key > 0)
             break;
     }
-    cout << "Processed " << nFrame << " frames" << endl;
+    std::cout << "Processed " << nFrame << " frames" << endl;
 
-    cout << "Done." << endl;
+    std::cout << "Done." << endl;
     return 0;
 }
