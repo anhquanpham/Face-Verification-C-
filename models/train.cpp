@@ -59,18 +59,6 @@ int main(int argc, char** argv)
     // Initialize FaceRecognizerSF to the smart pointer faceRecognizer
     cv::Ptr<cv::FaceRecognizerSF> faceRecognizer = cv::FaceRecognizerSF::create(fr_modelPath, "");
 
-    // Create the ground truth file if it does not exist
-    std::string groundTruthFaces = "groundTruthFace.txt";
-    if (!filesystem::exists(groundTruthFaces)) {
-        cout << "Creating database file: " << groundTruthFaces << endl;
-        filesystem::create_directory(groundTruthFaces);
-    }
-    std::string groundTruthFeatures = "groundTruthFeature.txt";
-    if (!filesystem::exists(groundTruthFeatures)) {
-        cout << "Creating database file: " << groundTruthFeatures << endl;
-        filesystem::create_directory(groundTruthFeatures);
-    }
-
     // Read images and their names in database
     std::vector<cv::Mat> images;
     std::vector<cv::String> imageNames;
@@ -82,9 +70,12 @@ int main(int argc, char** argv)
         }
     }
 
+    // Setup the file to store the ground truth features and labels
+    FileStorage fs("groundTruthFaces.yml", FileStorage::WRITE);
+
     /* Process all the images */
-    std:vector<cv::Mat> features;
-    std:vector<cv::String> labels;
+    vector<cv::Mat> features;
+    vector<cv::String> labels;
     for (auto& image : images) {
         
         std::vector<cv::Mat> out = detection(image, detector, faceRecognizer, scale);
@@ -103,6 +94,10 @@ int main(int argc, char** argv)
         labels.push_back(faceName);
     }
 
-    imwrite(groundTruthFaces, labels);
-    imwrite(groundTruthFeatures, features);
+    // Write the ground truth features and labels to the file
+    fs << "features" << features;
+    fs << "labels" << labels;
+    fs.release();
+
+    return 0;
 }

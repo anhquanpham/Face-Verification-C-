@@ -58,7 +58,7 @@ void show_label(Mat& input, String label) {
     */
     // Log the result
     cout << "Detected face: " << label << endl;
-    std::string text = "Welcome, " + label;
+    std::string text = label;
     // Calculate the position of the text
     int posX = int(input.cols / 2 - getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).width / 2);
     int posY = int(input.rows / 3 + getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).height / 2);
