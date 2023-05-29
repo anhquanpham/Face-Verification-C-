@@ -11,6 +11,17 @@ using namespace cv;
 using namespace std;
 
 String verification(Mat feature, double cosine_similar_thresh, double l2norm_similar_thresh, Ptr<FaceRecognizerSF> faceRecognizer) {
+    /*
+        This function verifies the identity of the detected face according to the local databse.
+        Args:
+            feature (Mat): Feature of the detected face
+            cosine_similar_thresh (double): Threshold of cosine similarity
+            l2norm_similar_thresh (double): Threshold of L2 norm similarity
+            faceRecognizer (Ptr<FaceRecognizerSF>): FaceRecognizerSF model instance
+        Output:
+            label (String): Name of the detected person
+    */
+    
     // Path to the database of ground truth features
     String databasePath = "groundTruthFace";
     

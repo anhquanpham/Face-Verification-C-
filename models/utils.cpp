@@ -6,10 +6,10 @@
 #include <iostream>
 #include "utils.hpp"
 
-using namespace cv;
 using namespace std;
+using namespace cv;
 
-void visualize(Mat& input, int frame, Mat& faces, double fps, int thickness = 2) {
+void visualize(Mat& input, int frame, Mat& faces, double fps) {
     /*
         This function draws bounding boxes, landmarks, and label to the input image given the result of the face detection.
         Args:
@@ -17,7 +17,6 @@ void visualize(Mat& input, int frame, Mat& faces, double fps, int thickness = 2)
             frame (int): Frame number
             faces (Mat): Result of the face detection
             fps (double): Frames per second
-            thickness (int): Thickness of the bounding box and landmark
         Output:
             None
     */
@@ -36,13 +35,13 @@ void visualize(Mat& input, int frame, Mat& faces, double fps, int thickness = 2)
              << endl;
 
         // Draw bounding box
-        rectangle(input, Rect2i(int(faces.at<float>(i, 0)), int(faces.at<float>(i, 1)), int(faces.at<float>(i, 2)), int(faces.at<float>(i, 3))), Scalar(0, 255, 0), thickness);
+        rectangle(input, Rect2i(int(faces.at<float>(i, 0)), int(faces.at<float>(i, 1)), int(faces.at<float>(i, 2)), int(faces.at<float>(i, 3))), Scalar(0, 255, 0), 2);
         // Draw landmarks
-        circle(input, Point2i(int(faces.at<float>(i, 4)), int(faces.at<float>(i, 5))), 2, Scalar(255, 0, 0), thickness);
-        circle(input, Point2i(int(faces.at<float>(i, 6)), int(faces.at<float>(i, 7))), 2, Scalar(0, 0, 255), thickness);
-        circle(input, Point2i(int(faces.at<float>(i, 8)), int(faces.at<float>(i, 9))), 2, Scalar(0, 255, 0), thickness);
-        circle(input, Point2i(int(faces.at<float>(i, 10)), int(faces.at<float>(i, 11))), 2, Scalar(255, 0, 255), thickness);
-        circle(input, Point2i(int(faces.at<float>(i, 12)), int(faces.at<float>(i, 13))), 2, Scalar(0, 255, 255), thickness);
+        circle(input, Point2i(int(faces.at<float>(i, 4)), int(faces.at<float>(i, 5))), 2, Scalar(255, 0, 0), 2);
+        circle(input, Point2i(int(faces.at<float>(i, 6)), int(faces.at<float>(i, 7))), 2, Scalar(0, 0, 255), 2);
+        circle(input, Point2i(int(faces.at<float>(i, 8)), int(faces.at<float>(i, 9))), 2, Scalar(0, 255, 0), 2);
+        circle(input, Point2i(int(faces.at<float>(i, 10)), int(faces.at<float>(i, 11))), 2, Scalar(255, 0, 255), 2);
+        circle(input, Point2i(int(faces.at<float>(i, 12)), int(faces.at<float>(i, 13))), 2, Scalar(0, 255, 255), 2);
     }
     putText(input, fpsString, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 2);
 }
@@ -53,7 +52,7 @@ void show_label(Mat& input, String label) {
         Args:
             input (Mat): Input image
             label (String): Label
-            thickness (int): Thickness of the bounding box and landmark
+            2 (int): 2 of the bounding box and landmark
         Output:
             None
     */

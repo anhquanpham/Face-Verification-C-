@@ -79,7 +79,7 @@ int main(int argc, char** argv)
     }
 
     /* Process all the images */
-    for (const auto& image : images) {
+    for (auto& image : images) {
         
         std::vector<cv::Mat> out = detection(image, detector, faceRecognizer, scale);
         if (out.empty()) {

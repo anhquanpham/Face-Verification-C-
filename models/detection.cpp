@@ -12,6 +12,17 @@ using namespace cv;
 using namespace std;
 
 std::vector<cv::Mat> detection(cv::Mat &image, cv::Ptr<FaceDetectorYN> detector, cv::Ptr<FaceRecognizerSF> faceRecognizer, float scale) {
+    /*
+        This function detects faces and their features from the input image.
+        Args:
+            image (Mat): Input image
+            detector (Ptr<FaceDetectorYN>): FaceDetectorYN model instance
+            faceRecognizer (Ptr<FaceRecognizerSF>): FaceRecognizerSF model instance
+            scale (float): Scale factor used to resize input image
+        Output:
+            faces (Mat): Result of the face detection
+            feature (Mat): Feature of the detected face
+    */
 
     // Resize image according to the scale factor to optimize the inference speed
     int imageWidth = int(image.cols * scale);
