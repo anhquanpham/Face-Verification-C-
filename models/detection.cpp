@@ -5,37 +5,41 @@
 
 #include <iostream>
 #include <vector>
-#include "utils.hpp"
 #include "detection.hpp"
+#include "utils.hpp"
 
 using namespace cv;
 using namespace std;
 
-vector<Mat> detection(Mat &image, Ptr<FaceDetectorYN> detector, Ptr<FaceRecognizerSF> faceRecognizer, float scale) {
+std::vector<cv::Mat> detection(cv::Mat &image, cv::Ptr<FaceDetectorYN> detector, cv::Ptr<FaceRecognizerSF> faceRecognizer, float scale) {
 
     // Resize image according to the scale factor to optimize the inference speed
     int imageWidth = int(image.cols * scale);
     int imageHeight = int(image.rows * scale);
-    resize(image, image, Size(imageWidth, imageHeight));
+    cv::resize(image, image, Size(imageWidth, imageHeight));
 
     TickMeter tm;
     tm.reset();
     tm.start();
     detector->setInputSize(image.size());
 
-    Mat faces;
+    cv::Mat faces;
     detector->detect(image, faces);
     tm.stop();
 
     visualize(image, -1, faces, tm.getFPS());
 
     // extract features
-    Mat aligned_face, feature;
-    faceRecognizer->alignCrop(image, faces.row(0), aligned_face);
-    // Run feature extraction with given aligned_face
-    faceRecognizer->feature(aligned_face, feature);
-    feature = feature.clone();
+    cv::Mat aligned_face, feature;
+    if (!faces.empty()) {
+        faceRecognizer->alignCrop(image, faces.row(0), aligned_face);
+        // Run feature extraction with given aligned_face
+        faceRecognizer->feature(aligned_face, feature);
+        feature = feature.clone();
+    } 
 
-    vector<Mat> out = {image, feature};
+    std::vector<cv::Mat> out;
+    out.push_back(faces);
+    out.push_back(feature);
     return out;
 }

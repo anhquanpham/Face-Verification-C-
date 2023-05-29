@@ -13,6 +13,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/objdetect.hpp>
+#include <opencv2/core/utility.hpp>
 
 #include <iostream>
 #include <vector>
@@ -25,7 +26,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
     // Initialize parameters
-    CommandLineParser parser(argc, argv,
+    cv::CommandLineParser parser(argc, argv,
         "{help  h           |            | Print this message}"
         "{database d        | database   | Path to the database of ground truth face to verify}"
         "{scale sc          | 1.0        | Scale factor used to resize input video frames}"
@@ -39,12 +40,12 @@ int main(int argc, char** argv)
     {
         parser.printMessage();
         return 0;
-    }
+    };
 
-    String fd_modelPath = parser.get<String>("fd_model");
-    String fr_modelPath = parser.get<String>("fr_model");
+    cv::String fd_modelPath = parser.get<cv::String>("fd_model");
+    cv::String fr_modelPath = parser.get<cv::String>("fr_model");
 
-    String databasePath = parser.get<String>("database");
+    cv::String databasePath = parser.get<cv::String>("database");
 
     float scoreThreshold = parser.get<float>("score_threshold");
     float nmsThreshold = parser.get<float>("nms_threshold");
@@ -53,25 +54,25 @@ int main(int argc, char** argv)
 
     /* [Initialize_FaceDetectorYN] */
     // Initialize FaceDetectorYN to the smart pointer detector
-    Ptr<FaceDetectorYN> detector = FaceDetectorYN::create(fd_modelPath, "", Size(320, 320), scoreThreshold, nmsThreshold, topK);
+    cv::Ptr<cv::FaceDetectorYN> detector = cv::FaceDetectorYN::create(fd_modelPath, "", Size(320, 320), scoreThreshold, nmsThreshold, topK);
     
     /* [initialize_FaceRecognizerSF] */
     // Initialize FaceRecognizerSF to the smart pointer faceRecognizer
-    Ptr<FaceRecognizerSF> faceRecognizer = FaceRecognizerSF::create(fr_modelPath, "");
+    cv::Ptr<cv::FaceRecognizerSF> faceRecognizer = cv::FaceRecognizerSF::create(fr_modelPath, "");
 
     // Create the ground truth folder if it does not exist
-    String groundTruthFaces = "groundTruthFace";
+    std::string groundTruthFaces = "groundTruthFace";
     if (!filesystem::exists(groundTruthFaces)) {
         cout << "Creating database folder: " << groundTruthFaces << endl;
         filesystem::create_directory(groundTruthFaces);
     }
 
     // Read images and their names in database
-    vector<Mat> images;
-    vector<String> imageNames;
+    std::vector<cv::Mat> images;
+    std::vector<cv::String> imageNames;
     for (auto& entry : filesystem::directory_iterator(databasePath)) {
         imageNames.push_back(entry.path().string());
-        Mat image = imread(entry.path().string());
+        cv::Mat image = imread(entry.path().string());
         if (!image.empty()) {
             images.push_back(image);
         }
@@ -80,15 +81,15 @@ int main(int argc, char** argv)
     /* Process all the images */
     for (const auto& image : images) {
         
-        vector<Mat> out = detection(image, detector, faceRecognizer, scale);
+        std::vector<cv::Mat> out = detection(image, detector, faceRecognizer, scale);
         if (out.empty()) {
             cout << "No face detected in " << imageNames[&image - &images[0]] << endl;
             continue;
-        }
+        };
 
-        Mat feature = out[1];
+        cv::Mat feature = out[1];
         // Save the face to the ground truth folder with the name same as its file name
-        String faceName = filesystem::path(imageNames[&image - &images[0]]).filename().string();
+        cv::String faceName = filesystem::path(imageNames[&image - &images[0]]).filename().string();
         imwrite(groundTruthFaces + "/" + faceName, feature);
     }
 }

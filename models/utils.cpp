@@ -25,7 +25,7 @@ void visualize(Mat& input, int frame, Mat& faces, double fps, int thickness = 2)
     std::string fpsString = cv::format("FPS : %.2f", (float)fps);
     if (frame >= 0)
         cout << "Frame " << frame << ", ";
-    cout << "FPS: " << fpsString << endl;
+    cout << fpsString << endl;
     for (int i = 0; i < faces.rows; i++)
     {
         // Print results
@@ -57,7 +57,9 @@ void show_label(Mat& input, String label) {
         Output:
             None
     */
-    String text = "Welcome, " + label;
+    // Log the result
+    cout << "Detected face: " << label << endl;
+    std::string text = "Welcome, " + label;
     // Calculate the position of the text
     int posX = input.cols / 2 - getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).width / 2;
     int posY = input.rows * 2/3 + getTextSize(text, FONT_HERSHEY_SIMPLEX, 1, 2, 0).height / 2;

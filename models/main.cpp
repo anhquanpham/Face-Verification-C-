@@ -88,9 +88,9 @@ int main(int argc, char** argv)
 
         // Detect and verify face
         vector<Mat> out = detection(frame, detector, faceRecognizer, scale);
-        if (!out.empty()) {
-            Mat result = out[0];
-            Mat feature = out[1];
+        Mat result = out[0];
+        Mat feature = out[1];
+        if (!feature.empty()) {
             String name = verification(feature, cosine_similar_thresh, l2norm_similar_thresh, faceRecognizer);
             if (!name.empty()) {
                 show_label(result, name);
@@ -98,10 +98,8 @@ int main(int argc, char** argv)
                 String label = "Your face is not recorded in our system";
                 show_label(result, label);
             }
-            imshow("Live", result);
-        } else {
-            imshow("Live", frame);
-        }
+        } 
+        imshow("Live", result);
 
         ++nFrame;
 
