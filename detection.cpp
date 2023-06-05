@@ -48,7 +48,7 @@ std::vector<cv::Mat> detection(cv::Mat &image, cv::Ptr<FaceDetectorYN> detector,
         // Run feature extraction with given aligned_face
         faceRecognizer->feature(aligned_face, feature);
         feature = feature.clone();
-    } 
+    }
 
     std::vector<cv::Mat> out;
     out.push_back(result);

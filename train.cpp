@@ -51,11 +51,9 @@ int main(int argc, char** argv)
     int topK = parser.get<int>("top_k");
     float scale = parser.get<float>("scale");
 
-    /* [Initialize_FaceDetectorYN] */
     // Initialize FaceDetectorYN to the smart pointer detector
     cv::Ptr<cv::FaceDetectorYN> detector = cv::FaceDetectorYN::create(fd_modelPath, "", Size(320, 320), scoreThreshold, nmsThreshold, topK);
     
-    /* [initialize_FaceRecognizerSF] */
     // Initialize FaceRecognizerSF to the smart pointer faceRecognizer
     cv::Ptr<cv::FaceRecognizerSF> faceRecognizer = cv::FaceRecognizerSF::create(fr_modelPath, "");
 
