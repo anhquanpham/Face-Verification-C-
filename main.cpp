@@ -177,7 +177,7 @@ public:
             cv::Mat feature = *i;
             String label = this->verification(feature, cosine_similar_thresh, l2norm_similar_thresh);
             if (!label.empty()) {
-                attendance_check(label);
+                this->attendance_check(label);
                 show_label(result, label);
             } else {
                 String err = "Your face is not recorded in our system";
