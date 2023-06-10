@@ -19,7 +19,6 @@ public:
         this->detector = FaceDetectorYN::create(detector_path, "", Size(320, 320), scoreThreshold, nmsThreshold, topK);
     }
 
-
     int capture_img() {
         /*
             Capture and then display the image.
@@ -44,6 +43,9 @@ public:
                 return -1;
             }
 
+            // Flip the frame horizontally
+            cv::flip(frame, frame, 1);
+
             // Display the camera feed
             cv::imshow("Camera Feed", frame);
 
@@ -54,7 +56,7 @@ public:
             }
 
         }
-        
+    
         if (!this->is_face_detected(this->Captured_Image)) {
             std::cout << "Unable to detect face in the image. Please take another photo." << std::endl;
             this->Captured_Image.release();
@@ -68,7 +70,8 @@ public:
             cv::destroyAllWindows();
         }
 
-        return 0;
+    return 0;
+    
     }
 
 

@@ -233,8 +233,7 @@ int main(int argc, char** argv)
     frameWidth = int(capture.get(CAP_PROP_FRAME_WIDTH) * scale);
     frameHeight = int(capture.get(CAP_PROP_FRAME_HEIGHT) * scale);
     string window_name = "Face Verification";
-    namedWindow(window_name); //create a window 
-
+    namedWindow(window_name); //create a window
     std::cout << "Window size" << ": width=" << frameWidth << ", height=" << frameHeight << endl;
 
     std::cout << "Press any key to exit..." << endl;
@@ -249,6 +248,9 @@ int main(int argc, char** argv)
             cerr << "Can't grab frame! Stop\n";
             break;
         }
+
+        // Flip the frame horizontally
+        cv::flip(frame, frame, 1);
 
         // Detect and verify face
         Verification verification_instance(fd_modelPath, fr_modelPath, scoreThreshold, nmsThreshold, topK);
