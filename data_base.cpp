@@ -47,7 +47,7 @@ public:
             // Display the camera feed
             cv::imshow("Camera Feed", frame);
 
-            // Break the loop if use press any keys
+            // Break the loop if user press any keys
             if (cv::waitKey(1)==13) {
                 this->Captured_Image = frame;
                 break;

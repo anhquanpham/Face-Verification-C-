@@ -2,5 +2,6 @@
 database
 train
 main
+data
 groundTruthFaces.yml
 attendance.txt
