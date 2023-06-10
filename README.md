@@ -9,7 +9,13 @@ Final Project ELEC2030 - VinUniversity
 
 First, a database folder needs to be created. This folder stores the ground truth faces and the identities to compare. 
 
-Example filepath: `database/identity.jpg`
+Example filepath: `database/identity.jpg` 
+
+To take a picture of user, create a database if not exist and then add the picture to that database.
+``` bash
+make data
+./data
+```
 
 To get the ground truth faces to compare from the database:
 ``` bash
