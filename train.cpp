@@ -96,6 +96,7 @@ int main(int argc, char** argv)
     fs << "features" << features;
     fs << "labels" << labels;
     fs.release();
-
+    
+    std::cout << "Feature extraction done." << std::endl;
     return 0;
 }
