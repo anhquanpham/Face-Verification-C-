@@ -8,9 +8,9 @@
 using namespace cv;
 using namespace std;
 
+
 class Database {
 private:
-//     cv::Mat Captured_Image;
     cv::Ptr<FaceDetectorYN> detector;
     cv::Mat Captured_Image;
 
@@ -21,8 +21,10 @@ public:
 
     int capture_img() {
         /*
-            Capture and then display the image.
+            Capture the image, save it to CAptured_Image attribute.
             Accept the image if face can be detected in it and require user to retake the photo other wise.
+            Args:
+                None
         */
         cv:: VideoCapture camera(0); // 0 indicate the default camera
         if (!camera.isOpened()) {
@@ -75,24 +77,13 @@ public:
     }
 
 
-    // int display_captured_img() {
-    //     /*
-    //         Display the captured image.
-    //     */
-    //     if (Captured_Image.empty()) {
-    //         std::cout << "No image to save." <<std::endl;
-    //         return -1;
-    //     }
-    //     cv::imshow("Captured Image", Captured_Image);
-    //     cv::waitKey(5000);
-    //     cv::destroyAllWindows();
-    //     return 0;
-    // }
-
-
-    int save_captured_img(cv::Mat frame, std::string label, std::string folder) {
+    int save_img(cv::Mat frame, std::string label, std::string folder) {
         /*
-            Save captured image.
+            Save a image to the data base.
+            Args:
+                image (Mat): input image.
+                lable (string): label of the image
+                folder (string): name of folder that the image will be saved to
         */
         std::string file_path = "./" + folder + "/" + label + ".jpg";
         // chech if the folder path exist. If not, create one.
@@ -131,6 +122,8 @@ public:
     int add_database() {
     /*
         Take a picture of user and save it to the data base.
+        Args:
+            None
     */
         this->capture_img();
         std::cout << "Do you want to save the image? (y/n): ";
@@ -141,23 +134,12 @@ public:
             std::string label;
             std::cout << "Enter the identity: ";
             std::cin >> label;
-            this->save_captured_img(this->Captured_Image, label, folder);
+            this->save_img(this->Captured_Image, label, folder);
         }
         return 0;
     }
-
-    // int clear() {
-    //     /*
-    //         Clear database.
-    //     */
-    //     std::cout << "Delete all the images in the data base? (y/n) ";
-    //     char choice;
-    //     std::cin >>choice;
-    //     if (choice == 'Y' || choice == 'y') {
-
-    //     } 
-    // }
 };
+
 
 int main() {
     std::string detector_path = "pretrained/yunet.onnx";
