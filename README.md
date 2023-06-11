@@ -7,7 +7,7 @@ Final Project ELEC2030 - VinUniversity
 
 ## How to run
 
-First, a database folder needs to be created. This folder stores the ground truth faces and the identities to compare. 
+First, install opencv. Then, a database folder needs to be created. This folder stores the ground truth faces and the identities to compare. 
 
 Example filepath: `database/identity.jpg` 
 
